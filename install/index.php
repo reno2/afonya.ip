@@ -6,8 +6,11 @@ use Bitrix\Main\EventManager;
 use \Bitrix\Main\Loader;
 use \Bitrix\Main\Entity\Base;
 use \Bitrix\Main\Application;
+use Bitrix\Main\Type\DateTime;
 
 class afonya_ip extends CModule{
+
+		const AGENT_TIME_OUT = 30;
 		/**
 		 * afonya_ip constructor.
 		 */
@@ -73,6 +76,7 @@ class afonya_ip extends CModule{
 						if ($request["savedata"] != "Y")
 								$this->UnInstallDB();
 
+						//\CAgent::RemoveModuleAgents('afonya.ip');
 						\Bitrix\Main\ModuleManager::unRegisterModule($this->MODULE_ID);
 
 
@@ -109,6 +113,16 @@ class afonya_ip extends CModule{
 						Base::getInstance('\Afonya\Ip\Table')->createDbTable();
 				}
 
+				$t = DateTime::createFromTimestamp(time() + static::AGENT_TIME_OUT);
+				\CAgent::AddAgent(
+						"Afonya\\Ip\\Agent::updateData();",
+						"afonya.ip",
+						"N",
+						30,
+						"",
+						"Y",
+						$t->toString()
+				);
 				return true;
 		}
 

@@ -31,10 +31,12 @@ class Table extends Entity\DataManager
 						)),
 						//ORDER_ID
 						new Entity\IntegerField('ORDER_ID'),
-						//Название
-						new Entity\TextField('DATA', array(
-								'required' => true,
-						)),
+
+						//User Ip
+						new Entity\StringField('IP'),
+
+						//Серилизованный массив
+						new Entity\TextField('DATA')
 
 				);
 		}
