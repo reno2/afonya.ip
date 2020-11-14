@@ -11,8 +11,8 @@ use \Bitrix\Main\Diag\Debug;
 use Afonya\Ip\Main;
 
 class Agent{
-		function updateData(){
-				Main::getEmptyData();
-				return __CLASS__ . "::updateData();";
-		}
+	function updateData(){
+		Main::getEmptyData();
+		return __CLASS__ . "::updateData();";
+	}
 }

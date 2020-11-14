@@ -10,24 +10,24 @@ use Bitrix\Main\Type\DateTime;
 
 class afonya_ip extends CModule{
 
-		const AGENT_TIME_OUT = 30;
+	const AGENT_TIME_OUT = 30;
 		/**
 		 * afonya_ip constructor.
 		 */
 		function __construct()
 		{
-				$this->MODULE_ID = 'afonya.ip';
-				$this->MODULE_NAME = "Афоня ip module";
-				$this->MODULE_DESCRIPTION = 'create ORM and add ip';
-				$this->PARTNER_NAME        ="Афоня";
-				$this->PARTNER_URI         = "";
-				$arModuleVersion = array();
-				include(__DIR__."/version.php");
-				if (is_array($arModuleVersion) && array_key_exists("VERSION", $arModuleVersion))
-				{
-						$this->MODULE_VERSION = $arModuleVersion["VERSION"];
-						$this->MODULE_VERSION_DATE = $arModuleVersion["VERSION_DATE"];
-				}
+			$this->MODULE_ID = 'afonya.ip';
+			$this->MODULE_NAME = "Афоня ip module";
+			$this->MODULE_DESCRIPTION = 'create ORM and add ip';
+			$this->PARTNER_NAME        ="Афоня";
+			$this->PARTNER_URI         = "";
+			$arModuleVersion = array();
+			include(__DIR__."/version.php");
+			if (is_array($arModuleVersion) && array_key_exists("VERSION", $arModuleVersion))
+			{
+				$this->MODULE_VERSION = $arModuleVersion["VERSION"];
+				$this->MODULE_VERSION_DATE = $arModuleVersion["VERSION_DATE"];
+			}
 		}
 
 		/**
@@ -35,7 +35,7 @@ class afonya_ip extends CModule{
 		 */
 		public function isVersionD7()
 		{
-				return CheckVersion(\Bitrix\Main\ModuleManager::getVersion('main'), '14.00.00');
+			return CheckVersion(\Bitrix\Main\ModuleManager::getVersion('main'), '14.00.00');
 		}
 
 		/**
@@ -43,46 +43,46 @@ class afonya_ip extends CModule{
 		 */
 		public function DoInstall()
 		{
-				global $APPLICATION;
-				if ($this->isVersionD7())
-				{
-						\Bitrix\Main\ModuleManager::registerModule($this->MODULE_ID);
-						Loader::includeModule("afonya.ip");
-						$this->InstallEvents();
-						$this->InstallDB();
-				}
-				else
-				{
-						$APPLICATION->ThrowException("Не поддерживается ядро D7");
-				}
-				$APPLICATION->IncludeAdminFile("Установка модуля", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID.  "/install/step.php");
+			global $APPLICATION;
+			if ($this->isVersionD7())
+			{
+				\Bitrix\Main\ModuleManager::registerModule($this->MODULE_ID);
+				Loader::includeModule("afonya.ip");
+				$this->InstallEvents();
+				$this->InstallDB();
+			}
+			else
+			{
+				$APPLICATION->ThrowException("Не поддерживается ядро D7");
+			}
+			$APPLICATION->IncludeAdminFile("Установка модуля", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID.  "/install/step.php");
 		}
 
 		function DoUninstall()
 		{
-				global $APPLICATION;
+			global $APPLICATION;
 
-				$context = Application::getInstance()->getContext();
-				$request = $context->getRequest();
+			$context = Application::getInstance()->getContext();
+			$request = $context->getRequest();
 
-				if($request["step"]<2)
-				{
-						$APPLICATION->IncludeAdminFile("Удаление модуля", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID."/install/unstep1.php");
-				}
-				elseif($request["step"]==2)
-				{
-						$this->UnInstallFiles();
-						$this->UnInstallEvents();
-						if ($request["savedata"] != "Y")
-								$this->UnInstallDB();
+			if($request["step"]<2)
+			{
+				$APPLICATION->IncludeAdminFile("Удаление модуля", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID."/install/unstep1.php");
+			}
+			elseif($request["step"]==2)
+			{
+				$this->UnInstallFiles();
+				$this->UnInstallEvents();
+				if ($request["savedata"] != "Y")
+					$this->UnInstallDB();
 
 						//\CAgent::RemoveModuleAgents('afonya.ip');
-						\Bitrix\Main\ModuleManager::unRegisterModule($this->MODULE_ID);
+				\Bitrix\Main\ModuleManager::unRegisterModule($this->MODULE_ID);
 
 
 
-						$APPLICATION->IncludeAdminFile("Удаление модуля", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID."/install/unstep2.php");
-				}
+				$APPLICATION->IncludeAdminFile("Удаление модуля", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID."/install/unstep2.php");
+			}
 		}
 
 		/**
@@ -92,50 +92,50 @@ class afonya_ip extends CModule{
 		{
 
 				// Вызывается после создания и расчета обьекта заказа.
-				EventManager::getInstance()->registerEventHandler(
-						'sale',
-						'OnSaleOrderSaved',
-						$this->MODULE_ID,
-						"Afonya\Ip\Main",
-						'onSaleOrderSaved'
-				);
-				return true;
+			EventManager::getInstance()->registerEventHandler(
+				'sale',
+				'OnSaleOrderSaved',
+				$this->MODULE_ID,
+				"Afonya\Ip\Main",
+				'onSaleOrderSaved'
+			);
+			return true;
 		}
 
 		function InstallDB()
 		{
-				Loader::includeModule($this->MODULE_ID);
-				if (!Application::getConnection(\Afonya\Ip\Table::getConnectionName())->isTableExists(
-						Base::getInstance('\Afonya\Ip\Table')->getDBTableName()
-				)
-				)
-				{
-						Base::getInstance('\Afonya\Ip\Table')->createDbTable();
-				}
+			Loader::includeModule($this->MODULE_ID);
+			if (!Application::getConnection(\Afonya\Ip\Table::getConnectionName())->isTableExists(
+				Base::getInstance('\Afonya\Ip\Table')->getDBTableName()
+			)
+		)
+			{
+				Base::getInstance('\Afonya\Ip\Table')->createDbTable();
+			}
 
-				$t = DateTime::createFromTimestamp(time() + static::AGENT_TIME_OUT);
-				\CAgent::AddAgent(
-						"Afonya\\Ip\\Agent::updateData();",
-						"afonya.ip",
-						"N",
-						30,
-						"",
-						"Y",
-						$t->toString()
-				);
-				return true;
+			$t = DateTime::createFromTimestamp(time() + static::AGENT_TIME_OUT);
+			\CAgent::AddAgent(
+				"Afonya\\Ip\\Agent::updateData();",
+				"afonya.ip",
+				"N",
+				30,
+				"",
+				"Y",
+				$t->toString()
+			);
+			return true;
 		}
 
 
 		public function UnInstallDB(){
 
-				Loader::includeModule($this->MODULE_ID);
+			Loader::includeModule($this->MODULE_ID);
 				// Проверяет от текущего подключения
 
-				Application::getConnection(\Afonya\Ip\Table::getConnectionName())->
-				queryExecute('drop table if exists ' . Base::getInstance('\Afonya\Ip\Table')->getDBTableName());
+			Application::getConnection(\Afonya\Ip\Table::getConnectionName())->
+			queryExecute('drop table if exists ' . Base::getInstance('\Afonya\Ip\Table')->getDBTableName());
 
-				Option::delete($this->MODULE_ID);
+			Option::delete($this->MODULE_ID);
 
 		}
 
@@ -143,15 +143,15 @@ class afonya_ip extends CModule{
 		{
 
 
-				EventManager::getInstance()->unRegisterEventHandler(
-						'sale',
-						'OnSaleComponentOrderCreated',
-						$this->MODULE_ID,
-						"Afonya\Ip\Main",
-						'onSaleOrderSaved'
-				);
+			EventManager::getInstance()->unRegisterEventHandler(
+				'sale',
+				'OnSaleComponentOrderCreated',
+				$this->MODULE_ID,
+				"Afonya\Ip\Main",
+				'onSaleOrderSaved'
+			);
 
-				return false;
+			return false;
 		}
 
-}
+	}

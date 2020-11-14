@@ -13,7 +13,7 @@ class Table extends Entity\DataManager
 		 */
 		public static function getTableName() : string
 		{
-				return 'afonya_table';
+			return 'afonya_table';
 		}
 
 
@@ -23,21 +23,21 @@ class Table extends Entity\DataManager
 		 */
 		public static function getMap() : array
 		{
-				return array(
+			return array(
 						//ID
-						new Entity\IntegerField('ID', array(
-								'primary'      => true,
-								'autocomplete' => true
-						)),
+				new Entity\IntegerField('ID', array(
+					'primary'      => true,
+					'autocomplete' => true
+				)),
 						//ORDER_ID
-						new Entity\IntegerField('ORDER_ID'),
+				new Entity\IntegerField('ORDER_ID'),
 
 						//User Ip
-						new Entity\StringField('IP'),
+				new Entity\StringField('IP'),
 
 						//Серилизованный массив
-						new Entity\TextField('DATA')
+				new Entity\TextField('DATA')
 
-				);
+			);
 		}
-}
+	}
