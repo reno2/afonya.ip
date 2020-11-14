@@ -35,7 +35,7 @@ class Table extends Entity\DataManager
 						//User Ip
 						new Entity\StringField('IP'),
 
-						//РЎРµСЂРёР»РёР·РѕРІР°РЅРЅС‹Р№ РјР°СЃСЃРёРІ
+						//Серилизованный массив
 						new Entity\TextField('DATA')
 
 				);

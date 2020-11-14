@@ -13,12 +13,12 @@ use Bitrix\Main\Diag\Debug;
 
 class Main{
 
-		/** @var string Р°РґСЂРµСЃСЃ  */
+		/** @var string адресс  */
 		const URL = 'https://rest.db.ripe.net/search.json?query-string=';
 
 
 		/**
-		 * Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРµСЂРёР°Р»РёР·РѕРІР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ
+		 * Возвращает сериализованную строку
 		 *
 		 * @param $ip
 		 *
@@ -29,7 +29,7 @@ class Main{
 				$result = self::URL.$ip;
 				$httpClient = new HttpClient();
 				$response = $httpClient->get($result);
-				// С‚СѓС‚ РЅР°РІРµСЂРЅРѕ РјРѕР¶РЅРѕ РїСЂРѕРІРµСЂСЏС‚СЊ СЃС‚Р°С‚СѓСЃС‹, РЅР°РїСЂРёРјРµСЂ РїСЂРё РѕС€РёР±РєРµ СЃРµСЂРІРµСЂ, Р·Р°РґР°РЅРёРµ РЅРµ Р·Р°РєСЂС‹РІР°С‚СЊ Рё РѕС‚РїСЂР°РІР»СЏС‚СЊ РїРѕРІС‚РѕСЂРЅРѕ
+				// тут наверно можно проверять статусы, например при ошибке сервер, задание не закрывать и отправлять повторно
 				if($httpClient->getStatus() == 200){
 						$r = json_decode($response);
 						return serialize($r->objects->object);
@@ -71,7 +71,7 @@ class Main{
 
 					if($res == 'no result'){
 
-						// РўСѓС‚ РїРѕРєР° СѓРґР°Р»РёРј Р·Р°РїРёСЃСЊ РµСЃР»Рё СЂРµР·СѓР»СЊС‚Р°С‚Р° РЅРµ РїСЂРёС€Р»Рѕ, С‡С‚РѕР±С‹ РЅРµ РїРѕРІС‚РѕСЂСЏС‚ Р·Р°РїСЂРѕСЃ
+						// Тут пока удалим запись если результата не пришло, чтобы не повторят запрос
 							$result = Table::delete($row['ID']);
 					}else{
 
@@ -80,9 +80,9 @@ class Main{
 							));
 					}
 					if($result->isSuccess()){
-						AddMessage2Log($row['ID'] . 'РћР±РЅРѕРІР»РµРЅРёРµ Р·Р°РїРёСЃРё', 'afonya.ip');
+						AddMessage2Log($row['ID'] . 'Обновление записи', 'afonya.ip');
 					}else{
-						AddMessage2Log($row['ID'] . 'РЈРґР°Р»РµРЅР° Р·Р°РїРёСЃСЊ', 'afonya.ip');
+						AddMessage2Log($row['ID'] . 'Удалена запись', 'afonya.ip');
 					}
 
 				}

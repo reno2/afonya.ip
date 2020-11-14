@@ -17,9 +17,9 @@ class afonya_ip extends CModule{
 		function __construct()
 		{
 				$this->MODULE_ID = 'afonya.ip';
-				$this->MODULE_NAME = "ÐÑ„Ð¾Ð½Ñ ip module";
+				$this->MODULE_NAME = "Àôîíÿ ip module";
 				$this->MODULE_DESCRIPTION = 'create ORM and add ip';
-				$this->PARTNER_NAME        ="ÐÑ„Ð¾Ð½Ñ";
+				$this->PARTNER_NAME        ="Àôîíÿ";
 				$this->PARTNER_URI         = "";
 				$arModuleVersion = array();
 				include(__DIR__."/version.php");
@@ -53,9 +53,9 @@ class afonya_ip extends CModule{
 				}
 				else
 				{
-						$APPLICATION->ThrowException("ÐÐµ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÑ‚ÑÑ ÑÐ´Ñ€Ð¾ D7");
+						$APPLICATION->ThrowException("Íå ïîääåðæèâàåòñÿ ÿäðî D7");
 				}
-				$APPLICATION->IncludeAdminFile("Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ð¼Ð¾Ð´ÑƒÐ»Ñ", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID.  "/install/step.php");
+				$APPLICATION->IncludeAdminFile("Óñòàíîâêà ìîäóëÿ", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID.  "/install/step.php");
 		}
 
 		function DoUninstall()
@@ -67,7 +67,7 @@ class afonya_ip extends CModule{
 
 				if($request["step"]<2)
 				{
-						$APPLICATION->IncludeAdminFile("Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð¼Ð¾Ð´ÑƒÐ»Ñ", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID."/install/unstep1.php");
+						$APPLICATION->IncludeAdminFile("Óäàëåíèå ìîäóëÿ", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID."/install/unstep1.php");
 				}
 				elseif($request["step"]==2)
 				{
@@ -81,7 +81,7 @@ class afonya_ip extends CModule{
 
 
 
-						$APPLICATION->IncludeAdminFile("Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð¼Ð¾Ð´ÑƒÐ»Ñ", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID."/install/unstep2.php");
+						$APPLICATION->IncludeAdminFile("Óäàëåíèå ìîäóëÿ", $_SERVER["DOCUMENT_ROOT"]."/local/modules/".$this->MODULE_ID."/install/unstep2.php");
 				}
 		}
 
@@ -91,7 +91,7 @@ class afonya_ip extends CModule{
 		function InstallEvents()
 		{
 
-				// Ð’Ñ‹Ð·Ñ‹Ð²Ð°ÐµÑ‚ÑÑ Ð¿Ð¾ÑÐ»Ðµ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ñ Ð¸ Ñ€Ð°ÑÑ‡ÐµÑ‚Ð° Ð¾Ð±ÑŒÐµÐºÑ‚Ð° Ð·Ð°ÐºÐ°Ð·Ð°.
+				// Âûçûâàåòñÿ ïîñëå ñîçäàíèÿ è ðàñ÷åòà îáüåêòà çàêàçà.
 				EventManager::getInstance()->registerEventHandler(
 						'sale',
 						'OnSaleOrderSaved',
@@ -130,7 +130,7 @@ class afonya_ip extends CModule{
 		public function UnInstallDB(){
 
 				Loader::includeModule($this->MODULE_ID);
-				// ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÑ‚ Ð¾Ñ‚ Ñ‚ÐµÐºÑƒÑ‰ÐµÐ³Ð¾ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ñ
+				// Ïðîâåðÿåò îò òåêóùåãî ïîäêëþ÷åíèÿ
 
 				Application::getConnection(\Afonya\Ip\Table::getConnectionName())->
 				queryExecute('drop table if exists ' . Base::getInstance('\Afonya\Ip\Table')->getDBTableName());
